@@ -1,15 +1,40 @@
 {
-  "name": "My AI Python Environment",
-  "image": "mcr.microsoft.com/devcontainers/python:3.10",
+  "name": "Full Stack AI Dev Environment",
+  // ၁။ အခြေခံ ကွန်ပျူတာကို Python 3.11 ပါတဲ့ version ယူမယ်
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+
+  // ၂။ ထပ်ဖြည့်ချင်တဲ့ Software ကြီးတွေကို Features မှာ ကြိုမှာမယ် (Install လုပ်စရာမလိုတော့ဘူး)
   "features": {
-    "ghcr.io/devcontainers/features/node:1": {} 
+    // Node.js (Latest LTS) ထည့်ပေးပါ
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts"
+    },
+    // Git နဲ့ GitHub CLI ထည့်ပေးပါ
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    // Starship (Terminal အလှ) ပါ တခါတည်းထည့်ခိုင်းမယ်
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "configureZshAsDefaultShell": true
+    }
   },
-  "postCreateCommand": "pip install clawdbot && npm install -g @anthropic-ai/claude-code",
+
+  // ၃။ VS Code Setting တွေကိုပါ တခါတည်း ချိန်ပေးထားမယ်
   "customizations": {
     "vscode": {
       "extensions": [
-        "ms-python.python"
-      ]
+        "ms-python.python",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
     }
-  }
+  },
+
+  // ၄။ စက်ပွင့်လာပြီးမှ ထပ်သွင်းချင်တဲ့ Library အသေးတွေကို ဒီမှာရေးမယ်
+  // (အစ်ကိုလိုချင်တဲ့ clawdbot, claude-code, flask, pandas အကုန် ဒီမှာထည့်မယ်)
+  "postCreateCommand": "bash -c 'pip install --upgrade pip && pip install --user requests httpx flask django fastapi uvicorn pandas numpy matplotlib python-dotenv openai anthropic langchain && npm install -g typescript ts-node nodemon yarn pnpm serve @anthropic-ai/claude-code && echo \"✅ All AI & Web Tools Installed!\"'"
+  
+  // (မှတ်ချက် - postCreateCommand ထဲမှာ clawdbot လိုမျိုး PyPI မှာ မရှိသေးတဲ့ package တွေထည့်ရင် error တက်နိုင်ပါတယ်၊ ရှိတာသေချာမှ ထည့်ပါ)
 }
